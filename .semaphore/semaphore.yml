@@ -59,16 +59,17 @@ blocks:
             - 'aws s3 rm s3://my-test-bucket/README.md'
       secrets:
         - name: localstack
-  - name: 'Block #4'
+  - name: Destroy
     dependencies:
       - Use the bucket
     task:
       jobs:
-        - name: 'Job #1'
+        - name: Destroy the artifact
           commands:
             - 'artifact pull workflow .terraform '
             - artifact pull workflow .terraform.lock.hcl
             - artifact pull workflow terraform.tfstate
+            - chmod +x .terraform/providers/registry.terraform.io/hashicorp/aws/3.76.1/linux_amd64/terraform-provider-aws_v3.76.1_x5
             - terraform destroy -auto-approve
   - name: Deploy 02
     dependencies:
@@ -85,4 +86,16 @@ blocks:
             - chmod +x .terraform/providers/registry.terraform.io/hashicorp/aws/3.76.1/linux_amd64/terraform-provider-aws_v3.76.1_x5
             - terraform validate
             - terraform apply -auto-approve
-            - artifact push workflow terraform.tfstate
+            - cp terraform.tfstate terraform.tfstate_
+            - artifact push workflow terraform.tfstate_
+  - name: Destroy 02
+    dependencies:
+      - Deploy 02
+    task:
+      jobs:
+        - name: Delete all
+          commands:
+            - cd 2-terraform-ec2
+            - 'artifact pull workflow .terraform '
+            - artifact pull workflow .terraform.lock.hcl
+            - artifact pull workflow terraform.tfstate
