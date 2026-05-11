@@ -30,7 +30,7 @@ blocks:
             - artifact push workflow .terraform.lock.hcl
       secrets:
         - name: localstack
-  - name: "\U0001F680 Deploy"
+  - name: Deploy 01
     dependencies:
       - Initialize
     task:
@@ -48,7 +48,7 @@ blocks:
         - name: localstack
   - name: Use the bucket
     dependencies:
-      - "\U0001F680 Deploy"
+      - Deploy 01
     task:
       jobs:
         - name: Run AWS
@@ -57,3 +57,32 @@ blocks:
             - 'aws s3 cp README.md s3://my-test-bucket/'
             - 'aws s3 ls s3://my-test-bucket'
             - 'aws s3 rm s3://my-test-bucket/README.md'
+      secrets:
+        - name: localstack
+  - name: 'Block #4'
+    dependencies:
+      - Use the bucket
+    task:
+      jobs:
+        - name: 'Job #1'
+          commands:
+            - 'artifact pull workflow .terraform '
+            - artifact pull workflow .terraform.lock.hcl
+            - artifact pull workflow terraform.tfstate
+            - terraform destroy -auto-approve
+  - name: Deploy 02
+    dependencies:
+      - Initialize
+    task:
+      secrets:
+        - name: localstack
+      jobs:
+        - name: Deploy EC2
+          commands:
+            - cd 2-terraform-ec2
+            - 'artifact pull workflow .terraform '
+            - artifact pull workflow .terraform.lock.hcl
+            - chmod +x .terraform/providers/registry.terraform.io/hashicorp/aws/3.76.1/linux_amd64/terraform-provider-aws_v3.76.1_x5
+            - terraform validate
+            - terraform apply -auto-approve
+            - artifact push workflow terraform.tfstate
