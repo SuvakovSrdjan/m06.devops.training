@@ -69,7 +69,6 @@ blocks:
             - 'artifact pull workflow .terraform '
             - artifact pull workflow .terraform.lock.hcl
             - artifact pull workflow terraform.tfstate --force
-            - artifact pull workflow terraform.tfstate_3 --force
             - chmod +x .terraform/providers/registry.terraform.io/hashicorp/aws/3.76.1/linux_amd64/terraform-provider-aws_v3.76.1_x5
             - terraform destroy -auto-approve
       secrets:
@@ -117,6 +116,7 @@ blocks:
             - 'artifact pull workflow .terraform '
             - artifact pull workflow .terraform.lock.hcl
             - chmod +x .terraform/providers/registry.terraform.io/hashicorp/aws/3.76.1/linux_amd64/terraform-provider-aws_v3.76.1_x5
+            - aws dynamodb delete-table --table-name group1-srdjan || true
             - terraform validate
             - terraform apply -auto-approve
             - cp terraform.tfstate terraform.tfstate_3
