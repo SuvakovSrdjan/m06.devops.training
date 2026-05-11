@@ -72,6 +72,8 @@ blocks:
             - artifact pull workflow terraform.tfstate
             - chmod +x .terraform/providers/registry.terraform.io/hashicorp/aws/3.76.1/linux_amd64/terraform-provider-aws_v3.76.1_x5
             - terraform destroy -auto-approve
+      secrets:
+        - name: localstack
   - name: Deploy 02
     dependencies:
       - Initialize
@@ -101,3 +103,5 @@ blocks:
             - artifact pull workflow .terraform.lock.hcl
             - artifact pull workflow terraform.tfstate_
             - terraform destroy -auto-approve
+      secrets:
+        - name: localstack
