@@ -144,7 +144,7 @@ blocks:
         - name: Destroy the 03
           commands:
             - cd 3-terraform-dynamodb
-            - artifact pull workflow terraform.tfstate_03 --force
+            - artifact pull workflow terraform.tfstate_3 --force
             - terraform destroy -auto-approve
       secrets:
         - name: localstack
