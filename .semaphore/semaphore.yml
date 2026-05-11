@@ -144,6 +144,8 @@ blocks:
         - name: Destroy the 03
           commands:
             - cd 3-terraform-dynamodb
+            - 'artifact pull workflow .terraform '
+            - artifact pull workflow .terraform.lock.hcl
             - artifact pull workflow terraform.tfstate_3 --force
             - terraform destroy -auto-approve
       secrets:
