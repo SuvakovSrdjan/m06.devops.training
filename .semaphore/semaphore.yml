@@ -69,7 +69,7 @@ blocks:
             - cd 1-terraform-apply
             - 'artifact pull workflow .terraform '
             - artifact pull workflow .terraform.lock.hcl
-            - artifact pull workflow terraform.tfstate
+            - artifact pull --force workflow terraform.tfstate
             - chmod +x .terraform/providers/registry.terraform.io/hashicorp/aws/3.76.1/linux_amd64/terraform-provider-aws_v3.76.1_x5
             - terraform destroy -auto-approve
       secrets:
@@ -101,7 +101,7 @@ blocks:
             - cd 2-terraform-ec2
             - 'artifact pull workflow .terraform '
             - artifact pull workflow .terraform.lock.hcl
-            - artifact pull workflow terraform.tfstate_
+            - artifact pull workflow --force terraform.tfstate_
             - terraform destroy -auto-approve
       secrets:
         - name: localstack
