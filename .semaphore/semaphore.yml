@@ -24,6 +24,8 @@ blocks:
         - name: "\U0001F7E2 Run terraform init"
           commands:
             - cd 1-terraform-apply
+            - artifact pull workflow *
+            - terraform destroy -auto-approve
             - 'terraform init '
             - ls
             - 'artifact push workflow .terraform '
