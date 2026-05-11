@@ -24,6 +24,8 @@ blocks:
         - name: "\U0001F7E2 Run terraform init"
           commands:
             - terraform init
+            - 'artifact push workflow .terraform '
+            - artifact push workflow .terraform.lock.hcl
       secrets:
         - name: localstack
   - name: "\U0001F680 Deploy"
