@@ -106,3 +106,39 @@ blocks:
             - terraform destroy -auto-approve
       secrets:
         - name: localstack
+  - name: Deploy 03
+    dependencies:
+      - Initialize
+    task:
+      jobs:
+        - name: Deploy Dynamodb
+          commands:
+            - cd 3-terraform-dynamodb
+            - 'artifact pull workflow .terraform '
+            - artifact pull workflow .terraform.lock.hcl
+            - chmod +x .terraform/providers/registry.terraform.io/hashicorp/aws/3.76.1/linux_amd64/terraform-provider-aws_v3.76.1_x5
+            - terraform validate
+            - terraform apply -auto-approve
+            - cp terraform.tfstate terraform.tfstate_3
+            - artifact push workflow terraform.tfstate_3
+  - name: Interact
+    dependencies:
+      - Deploy 03
+    task:
+      jobs:
+        - name: Interact with the table
+          commands:
+            - cd 3-terraform-dynamodb
+            - aws dynamodb list-tables
+            - aws dynamodb describe-table --table-name group1-srdjan
+            - 'aws dynamodb put-item --table-name group1-srdjan --item ''{ "user_id": {"S": "u1"}, "name": {"S": "Alice"}, "email": {"S": "alice@example.com"} }'''
+  - name: Destroy_03
+    dependencies:
+      - Interact
+    task:
+      jobs:
+        - name: Destroy the 03
+          commands:
+            - cd 3-terraform-dynamodb
+            - artifact pull workflow terraform.tfstate_03 --force
+            - terraform destroy -auto-approve
