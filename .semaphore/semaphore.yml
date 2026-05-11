@@ -46,3 +46,14 @@ blocks:
             - artifact push workflow terraform.tfstate
       secrets:
         - name: localstack
+  - name: Use the bucket
+    dependencies:
+      - "\U0001F680 Deploy"
+    task:
+      jobs:
+        - name: Run AWS
+          commands:
+            - cd 1-terraform-apply
+            - 'aws s3 cp README.md s3://my-test-bucket/'
+            - 'aws s3 ls s3://my-test-bucket'
+            - 'aws s3 rm s3://my-test-bucket/README.md'
