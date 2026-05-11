@@ -66,6 +66,7 @@ blocks:
       jobs:
         - name: Destroy the artifact
           commands:
+            - cd 1-terraform-apply
             - 'artifact pull workflow .terraform '
             - artifact pull workflow .terraform.lock.hcl
             - artifact pull workflow terraform.tfstate
@@ -98,4 +99,5 @@ blocks:
             - cd 2-terraform-ec2
             - 'artifact pull workflow .terraform '
             - artifact pull workflow .terraform.lock.hcl
-            - artifact pull workflow terraform.tfstate
+            - artifact pull workflow terraform.tfstate_
+            - terraform destroy -auto-approve
