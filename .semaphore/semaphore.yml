@@ -24,6 +24,7 @@ blocks:
         - name: "\U0001F7E2 Run terraform init"
           commands:
             - terraform init
+            - ls -la
             - 'artifact push workflow .terraform '
             - artifact push workflow .terraform.lock.hcl
       secrets:
