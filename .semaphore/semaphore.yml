@@ -15,7 +15,7 @@ auto_cancel:
 global_job_config:
   prologue:
     commands:
-      - Checkout
+      - checkout
 blocks:
   - name: "\U0001F9EA Terraform and AWS"
     dependencies: []
@@ -23,7 +23,7 @@ blocks:
       jobs:
         - name: "\U0001F7E2 Run terraform init"
           commands:
-            - echo "dummy"
+            - terraform init
       secrets:
         - name: localstack
   - name: "\U0001F680 Deploy"
