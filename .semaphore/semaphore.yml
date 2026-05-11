@@ -121,6 +121,8 @@ blocks:
             - terraform apply -auto-approve
             - cp terraform.tfstate terraform.tfstate_3
             - artifact push workflow terraform.tfstate_3
+      secrets:
+        - name: localstack
   - name: Interact
     dependencies:
       - Deploy 03
@@ -132,6 +134,8 @@ blocks:
             - aws dynamodb list-tables
             - aws dynamodb describe-table --table-name group1-srdjan
             - 'aws dynamodb put-item --table-name group1-srdjan --item ''{ "user_id": {"S": "u1"}, "name": {"S": "Alice"}, "email": {"S": "alice@example.com"} }'''
+      secrets:
+        - name: localstack
   - name: Destroy_03
     dependencies:
       - Interact
@@ -142,3 +146,5 @@ blocks:
             - cd 3-terraform-dynamodb
             - artifact pull workflow terraform.tfstate_03 --force
             - terraform destroy -auto-approve
+      secrets:
+        - name: localstack
